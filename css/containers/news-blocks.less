@@ -1,0 +1,326 @@
+// main: ../style.less
+
+
+/*---------------------first block---------------------*/
+
+.first-block {
+    order: 0;
+    height: 400px;
+    width: 400px;
+    font-size: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 40px;
+    & button {
+        height: 404px;
+        width: 404px;
+        justify-content: flex-end;
+        font-size: 30px;
+    }
+    & .news-header img {
+        width: 90%;
+        height: auto;
+    }
+}
+
+
+/*---------------------second block---------------------*/
+
+.second-block {
+    order: 1;
+    height: 400px;
+    width: 400px;
+    font-size: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 40px;
+    
+    & button {
+        height: 404px;
+        width: 404px;
+        justify-content: flex-end;
+        font-size: 30px;
+    }
+
+    & .news-header img {
+        width: 80%;
+        height: auto;
+    }
+}
+
+
+
+/*---------------------third block---------------------*/
+
+.third-block {
+    order: 2;
+    font-size: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 40px;
+    height: 400px;
+    width: 560px;
+
+    & button {
+        height: 404px;
+        width: 560px;
+        justify-content: flex-end;
+        font-size: 35px;
+    }
+}
+
+
+/*---------------------fourth block---------------------*/
+
+.fourth-block {
+    order: 3;
+    font-size: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 40px;
+    height: 180px;
+    width: 180px;
+
+    & button {
+        height: 184px;
+        width: 184px;
+        justify-content: flex-end;
+        font-size: 20px;
+    }
+
+    & .news-header img {
+        width: 90%;
+        height: auto;
+    }
+}
+
+
+/*---------------------fifth block---------------------*/
+
+.fifth-block {
+    order: 4;
+    font-size: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 40px;
+    height: 180px;
+    width: 180px;
+
+    & button {
+        height: 184px;
+        width: 184px;
+        justify-content: flex-end;
+        font-size: 20px;
+    }
+
+    & .news-header img {
+        width: 90%;
+        height: auto;
+    }
+}
+
+
+/*---------------------sixth block---------------------*/
+
+.sixth-block {
+    order: 4;
+    font-size: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 40px;
+    height: 180px;
+    width: 180px;
+
+    & button {
+        height: 184px;
+        width: 184px;
+        justify-content: flex-end;
+        font-size: 20px;
+    }
+}
+
+
+/*---------------------seventh block---------------------*/
+
+.seventh-block {
+    order: 4;
+    font-size: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 40px;
+    height: 180px;
+    width: 180px;
+
+    & button {
+        height: 184px;
+        width: 184px;
+        justify-content: flex-end;
+        font-size: 20px;
+    }
+}
+
+
+/*---------------------eighth block---------------------*/
+
+.eighth-block {
+    order: 4;
+    font-size: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 40px;
+    height: 180px;
+    width: 260px;
+
+    & button {
+        height: 184px;
+        width: 264px;
+        justify-content: flex-end;
+        font-size: 20px;
+    }
+}
+
+
+/*---------------------ninth block---------------------*/
+
+.ninth-block {
+    order: 4;
+    font-size: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 40px;
+    height: 180px;
+    width: 260px;
+
+    & button {
+        height: 184px;
+        width: 264px;
+        justify-content: flex-end;
+        font-size: 20px;
+    }
+}
+
+
+/*---------------------all blocks---------------------*/
+
+.news-header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    height: 100%;
+    width: 100%;
+    transition: 0s ease .2s;
+
+    &.active {
+        width: 0;
+        height: 0;
+        z-index: -1;
+        opacity: 0;
+        transition: 0s linear;
+    }
+
+    & img {
+        border: 2px solid black;
+        border-radius: 15px;
+        height: 70%;
+        width: auto;
+        margin-top: 6%;
+    }
+}
+
+.news-container {
+    background-color: @green;
+    border-radius: 15px;
+    transition: .2s linear;
+
+    & button {
+        position: absolute;
+        padding: 5px;
+        padding-bottom: 0;
+        border: 2px solid black;
+        border-radius: 15px;
+        background-image: linear-gradient(fade(@green, 0%), fade(@green, 70%), @green, lighten(@green, 8%));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &:hover {
+            background-image: linear-gradient( fade(@bluish-green, 0%), fade(@bluish-green, 70%), @bluish-green, darken(@bluish-green, 10%));
+        }
+    }
+
+    &.active {
+        border: 2px solid black;
+        height: auto;
+        width: 100%;
+        display: flex;
+        flex-direction: row-reverse;
+        transition: 1s linear;
+
+        & button {
+            height: 0;
+            width: 0;
+            font-size: 0;
+            z-index: -1;
+        }
+    }
+}
+
+.news-box {
+    width: 0;
+    height: 0;
+    z-index: -1;
+    opacity: 0;
+    transition: 0s linear;
+    display: none;
+
+    &.active {
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 1;
+        transition: 1s linear;
+        display: inline-block;
+        transition: 0s linear;
+
+        & a {
+            text-decoration: none;
+            color: black;
+            border-radius: 2px;
+            background-image: linear-gradient(fade(@pale-blue, 40%), @pale-blue);
+
+            &:hover {
+                background-image: linear-gradient(fade(@bluish-green, 40%), @bluish-green);
+            }
+        }
+
+        & .news-icons {
+            display: flex; 
+            justify-content: space-between;
+
+            & a {
+                background-image: none;
+                background-color: transparent;
+
+                &:hover {
+                    background-color: transparent;
+                    background-image: none;
+                }
+            }
+        }
+    }
+}
+
+.news-back {
+    height: 40px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.news-settings {
+    height: 40px;
+    margin: 5px;
+    cursor: pointer;
+    justify-self: end;
+}

@@ -1,0 +1,64 @@
+// compress: false, sourceMap: false
+@import "vars.less";
+
+body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: @light-gray;
+}
+
+
+
+
+button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+* {
+    outline: none;
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+    width: 19px;
+
+    &-track-piece {
+        background: @bluish-green;
+
+        border-left: 2px solid black;
+    }
+    &-thumb {
+        border-top: 2px solid black;
+        border-bottom: 2px solid black;
+        background-image: url('../icons/scrollbar-thumb.png');
+        &:hover {
+            background-image: url('../icons/scrollbar-thumb-hover.png');
+        }
+    }
+    
+}
+
+::-webkit-scrollbar:horizontal {
+    display: none;
+    
+}
+
+
+@import "containers/header.less";
+@import "containers/menu.less";
+@import "containers/main.less";
+@import "containers/new-news.less";
+@import "containers/news-blocks.less";
+@import "containers/footer.less";
+@import "containers/profile.less";
+
