@@ -2,13 +2,21 @@
 @import "vars.less";
 
 body {
+    & div.all {
+        width: 100%;
+        height: auto;
+    }
     position: relative;
     width: 100%;
+    min-height: 101vh;
     height: 100%;
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
     background-color: @light-gray;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 
@@ -61,4 +69,5 @@ button {
 @import "containers/news-blocks.less";
 @import "containers/footer.less";
 @import "containers/profile.less";
-
+@import "containers/auth.less";
+@import "containers/user-settings.less";

@@ -44,6 +44,18 @@ document.querySelector(".main-up-arrow").addEventListener("click", function(item
     })
 })
 
+/* -----------------------------------------------scroll------------------------------------------------------------ */
+
+function settingsCall() {
+    $(".overlay").css("display", "block");
+    $(".settings-profile").addClass('active');
+}
+
+function settingsClose() {
+    $(".overlay").css("display", "none");
+    $(".settings-profile.active").removeClass('active');
+}
+
 // var j = 0
 // var audios = new Array("audios/ayanamy-baby.mp3", "audios/black-baby.mp3", "audios/price-baby.mp3", "audios/small-baby.mp3")
 // var audiosTime = new Array("22000", "12000", "30000", "23000")

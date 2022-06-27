@@ -2,8 +2,23 @@
     require_once "config/connect.php";
     require_once "config/functions.php";
     require_once 'libs/db.php';
+    session_start();
     $title = mysqli_query($connect, "SELECT * FROM `title`");
     $title = mysqli_fetch_all($title);
+    if (isset($_SESSION['signin']))
+    {
+        $signin = R::findOne( 'users', ' login LIKE ? ', [$_SESSION['signin']['login']] );
+        $_SESSION['signin'] = $signin;
+        if($_SERVER['QUERY_STRING'] != 'user='.$_SESSION['signin']['id']) {
+            parse_str($_SERVER['QUERY_STRING'], $_SESSION['signin']['id']);
+        }
+        $privilege = R::findOne('privilege', 'name = ?', [$_SESSION['signin']['privilege']])['news'];
+    }
+    else
+    {
+        trim($_SERVER['QUERY_STRING']);
+    }
+    
 ?>
 
 
@@ -41,249 +56,323 @@
     </div>
     <img src="icons/icon_up.png" class="main-up">
     <img src="icons/icon_up_arrow.png" class="main-up-arrow">
+    <div class="all">
+        <header>
+            <div class="babydjon">
+                <h1 onclick="window.location.href = '/';"> Babydjon </h1>
+            </div>
+            <div class="header-text">
+                <h2 style="width: 300px;">
+                    официальный сайт подгузников
+                    <p style="font-size: 15px;">и не только</p>
+                </h2>
+            </div>
+        </header>
 
-    <header>
-        <div class="babydjon">
-            <h1 onclick="window.location.href = '/';"> Babydjon </h1>
-        </div>
-        <div class="header-text">
-            <h2 style="width: 300px;">
-                официальный сайт подгузников
-                <p style="font-size: 15px;">и не только</p>
-            </h2>
-        </div>
-    </header>
+        <menu>
+            <nav>
+                <button class="menu-text-main">
+                    Главная
+                </button>
+                <a class="menu-text" href="https://vk.com/zheleznyakov03">
+                    <p>Ассортимент</p>
+                </a>
+                <a class="menu-text" href="https://vk.com/zheleznyakov03">
+                    <p>Сообщения</p>
+                </a>
+                <a class="menu-text" href="https://vk.com/zheleznyakov03">
+                    <p>Друзья</p>
+                </a>
+                <a class="menu-text" href="https://vk.com/zheleznyakov03">
+                    <p>Форум</p>
+                </a>
+                <a class="menu-text" id="contacts">
+                    <p>Контакты</p>
+                </a>
+                <a class="menu-text" href="https://vk.com/zheleznyakov03">
+                    <p>Корзина</p>
+                </a>
+                <a class="menu-text" href="profile.php">
+                    <p>Профиль</p>
+                </a>
+            </nav>
+        </menu>
 
-    <menu>
-        <nav>
-            <button class="menu-text-main">
-                Главная
-            </button>
-            <a class="menu-text" href="https://vk.com/zheleznyakov03">
-                <p>Ассортимент</p>
-            </a>
-            <a class="menu-text" href="https://vk.com/zheleznyakov03">
-                <p>Сообщения</p>
-            </a>
-            <a class="menu-text" href="https://vk.com/zheleznyakov03">
-                <p>Друзья</p>
-            </a>
-            <a class="menu-text" href="https://vk.com/zheleznyakov03">
-                <p>Форум</p>
-            </a>
-            <a class="menu-text" id="contacts">
-                <p>Контакты</p>
-            </a>
-            <a class="menu-text" href="https://vk.com/zheleznyakov03">
-                <p>Корзина</p>
-            </a>
-            <a class="menu-text" href="profile.php">
-                <p>Профиль</p>
-            </a>
-        </nav>
-    </menu>
+        <main>
+            <!---------------------first block--------------------->
+            <div class="news-container first-block" id="first-block">
+                <div class="news-box" id="first-block-box">
+                    <div class="news-icons">
+                        <img src="icons/icon_back.png" class="news-back" onclick="i = 0, newsClose()">
 
-    <main>
-        <!---------------------first block--------------------->
-        <div class="news-container first-block" id="first-block">
-            <div class="news-box" id="first-block-box">
-                <div class="news-icons">
-                    <img src="icons/icon_back.png" class="news-back" onclick="i = 0, newsClose()">
-                    <a onclick="i = 0, settingsOpen()"><img src="icons/icon-settings.png" class="news-settings"></a>
+                        <?php
+                            if (isset($_SESSION['signin']))
+                            {
+                                if ($privilege == 1)
+                                {
+                                    echo('<img src="icons/icon-settings.png" class="news-settings" onclick="i = 0, settingsOpen()">');
+                                }
+                            }
+                        ?>
+                    </div>
+                    <?php
+                    $id = 1;
+                    newsRead($id);
+                    ?>
+                    <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-06 21:00"><?= $title[$id-1][2] ?></time></p>
                 </div>
-                <?php
-                $id = 1;
-                newsRead($id);
-                ?>
-                <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-06 21:00"><?= $title[$id-1][2] ?></time></p>
+
+                <div class="news-header" id="first-block-header">
+                    <img src="images/1-1.jpg">
+                    <button onclick="i = 0, newsCall()" id="first-block-button">
+                        <p><?=$title[$id-1][1]?></p>
+                    </button>
+                </div>
             </div>
 
-            <div class="news-header" id="first-block-header">
-                <img src="images/1-1.jpg">
-                <button onclick="i = 0, newsCall()" id="first-block-button">
+            <!---------------------second block--------------------->
+            <div class="news-container second-block" id="second-block">
+                <div class="news-box" id="second-block-box">
+                    <div style="display: flex; justify-content: space-between;">
+                        <img src="icons/icon_back.png" class="news-back" onclick="i = 1, newsClose()">
+                        <?php
+                            if (isset($_SESSION['signin']))
+                            {
+                                if ($privilege == 1)
+                                {
+                                    echo('<img src="icons/icon-settings.png" class="news-settings" onclick="i = 1, settingsOpen()">');
+                                }
+                            }
+                        ?>
+                    </div>
+                    <?php
+                    $id = 2;
+                    newsRead($id);
+                    ?>
+                    <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-08 22:00"><?=$title[$id-1][2]?></time></p>
+                </div>
+
+                <div class="news-header" id="second-block-header">
+                    <img src="images/2-1.jpg">
+                    <button onclick="i = 1, newsCall()">
+                        <p id="second-block-header-text"><?=$title[$id-1][1]?></p>
+                    </button>
+                </div>
+            </div>
+
+            <!---------------------third block--------------------->
+            <div class="news-container third-block" id="third-block">
+                <div class="news-box" id="third-block-box">
+                    <div style="display: flex; justify-content: space-between;">
+                        <img src="icons/icon_back.png" class="news-back" onclick="i = 2, newsClose()">
+                        <?php
+                            if (isset($_SESSION['signin']))
+                            {
+                                if ($privilege == 1)
+                                {
+                                    echo('<img src="icons/icon-settings.png" class="news-settings" onclick="i = 2, settingsOpen()">');
+                                }
+                            }
+                        ?>
+                    </div>
+                    <?php
+                                    $id = 3;
+                                    newsRead($id);
+                    ?>
+                    <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-13 21:00"><?=$title[$id-1][2]?></time></p>
+                </div>
+
+                <div class="news-header" id="third-block-header">
+                    <img src="images/3-1.jpg">
+                    <button onclick="i = 2, newsCall()">
+                        <p><?=$title[$id-1][1]?></p>
+                    </button>
+                </div>
+            </div>
+
+            <!---------------------fourth block--------------------->
+            <div class="news-container fourth-block" id="fourth-block">
+                <div class="news-box" id="fourth-block-box">
+                    <div style="display: flex; justify-content: space-between;">
+                        <img src="icons/icon_back.png" class="news-back" onclick="i = 3, newsClose()">
+                        <?php
+                            if (isset($_SESSION['signin']))
+                            {
+                                if ($privilege == 1)
+                                {
+                                    echo('<img src="icons/icon-settings.png" class="news-settings" onclick="i = 3, settingsOpen()">');
+                                }
+                            }
+                        ?>
+                    </div>
+                    <?php
+                                    $id = 4;
+                                    newsRead($id);
+                    ?>
+                    <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-14 22:00"><?=$title[$id-1][2]?></time></p>
+                </div>
+
+                <div class="news-header" id="fourth-block-header">
+                    <img src="images/4-1.jpg">
+                    <button onclick="i = 3, newsCall()">
+                        <p><?=$title[$id-1][1]?></p>
+                    </button>
+                </div>
+            </div>
+
+            <!---------------------fifth block--------------------->
+            <div class="news-container fifth-block" id="fifth-block">
+                <div class="news-box" id="fifth-block-box">
+                    <div style="display: flex; justify-content: space-between;">
+                        <img src="icons/icon_back.png" class="news-back" onclick="i = 4, newsClose()">
+                        <?php
+                            if (isset($_SESSION['signin']))
+                            {
+                                if ($privilege == 1)
+                                {
+                                    echo('<img src="icons/icon-settings.png" class="news-settings" onclick="i = 4, settingsOpen()">');
+                                }
+                            }
+                        ?>
+                    </div>
+                    <?php
+                                    $id = 5;
+                                    newsRead($id);
+                    ?>
+                    <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-16 14:24"><?=$title[$id-1][2]?></time></p>
+                </div>
+
+                <div class="news-header" id="fifth-block-header">
+                    <img src="images/5-1.jpg">
+                    <button onclick="i = 4, newsCall()">
                     <p><?=$title[$id-1][1]?></p>
-                </button>
-            </div>
-        </div>
-
-        <!---------------------second block--------------------->
-        <div class="news-container second-block" id="second-block">
-            <div class="news-box" id="second-block-box">
-                <div style="display: flex; justify-content: space-between;">
-                    <img src="icons/icon_back.png" class="news-back" onclick="i = 1, newsClose()">
-                    <img src="icons/icon-settings.png" class="news-settings" onclick="i = 1, settingsOpen()">
+                    </button>
                 </div>
-                <?php
-                $id = 2;
-                newsRead($id);
-                ?>
-                <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-08 22:00"><?=$title[$id-1][2]?></time></p>
             </div>
 
-            <div class="news-header" id="second-block-header">
-                <img src="images/2-1.jpg">
-                <button onclick="i = 1, newsCall()">
-                    <p id="second-block-header-text"><?=$title[$id-1][1]?></p>
-                </button>
-            </div>
-        </div>
-
-        <!---------------------third block--------------------->
-        <div class="news-container third-block" id="third-block">
-            <div class="news-box" id="third-block-box">
-                <div style="display: flex; justify-content: space-between;">
-                    <img src="icons/icon_back.png" class="news-back" onclick="i = 2, newsClose()">
-                    <img src="icons/icon-settings.png" class="news-settings" onclick="i = 2, settingsOpen()">
+            <!---------------------sixth block--------------------->
+            <div class="news-container sixth-block" id="sixth-block">
+                <div class="news-box" id="sixth-block-box">
+                    <div style="display: flex; justify-content: space-between;">
+                        <img src="icons/icon_back.png" class="news-back" onclick="i = 5, newsClose()">
+                        <?php
+                            if (isset($_SESSION['signin']))
+                            {
+                                if ($privilege == 1)
+                                {
+                                    echo('<img src="icons/icon-settings.png" class="news-settings" onclick="i = 5, settingsOpen()">');
+                                }
+                            }
+                        ?>
+                    </div>
+                    <?php
+                                    $id = 6;
+                                    newsRead($id);
+                    ?>
+                    <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-16 14:44"><?=$title[$id-1][2]?></time></p>
                 </div>
-                <?php
-                                $id = 3;
-                                newsRead($id);
-                ?>
-                <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-13 21:00"><?=$title[$id-1][2]?></time></p>
-            </div>
 
-            <div class="news-header" id="third-block-header">
-                <img src="images/3-1.jpg">
-                <button onclick="i = 2, newsCall()">
-                    <p><?=$title[$id-1][1]?></p>
-                </button>
-            </div>
-        </div>
-
-        <!---------------------fourth block--------------------->
-        <div class="news-container fourth-block" id="fourth-block">
-            <div class="news-box" id="fourth-block-box">
-                <div style="display: flex; justify-content: space-between;">
-                    <img src="icons/icon_back.png" class="news-back" onclick="i = 3, newsClose()">
-                    <img src="icons/icon-settings.png" class="news-settings" onclick="i = 3, settingsOpen()">
+                <div class="news-header" id="sixth-block-header">
+                    <img src="images/6-1.jpg">
+                    <button onclick="i = 5, newsCall()">
+                        <p><?=$title[$id-1][1]?></p>
+                    </button>
                 </div>
-                <?php
-                                $id = 4;
-                                newsRead($id);
-                ?>
-                <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-14 22:00"><?=$title[$id-1][2]?></time></p>
             </div>
 
-            <div class="news-header" id="fourth-block-header">
-                <img src="images/4-1.jpg">
-                <button onclick="i = 3, newsCall()">
-                    <p><?=$title[$id-1][1]?></p>
-                </button>
-            </div>
-        </div>
-
-        <!---------------------fifth block--------------------->
-        <div class="news-container fifth-block" id="fifth-block">
-            <div class="news-box" id="fifth-block-box">
-                <div style="display: flex; justify-content: space-between;">
-                    <img src="icons/icon_back.png" class="news-back" onclick="i = 4, newsClose()">
-                    <img src="icons/icon-settings.png" class="news-settings" onclick="i = 4, settingsOpen()">
+            <!---------------------seventh block--------------------->
+            <div class="news-container seventh-block" id="seventh-block">
+                <div class="news-box" id="seventh-block-box">
+                    <div style="display: flex; justify-content: space-between;">
+                        <img src="icons/icon_back.png" class="news-back" onclick="i = 6, newsClose()">
+                        <?php
+                            if (isset($_SESSION['signin']))
+                            {
+                                if ($privilege == 1)
+                                {
+                                    echo('<img src="icons/icon-settings.png" class="news-settings" onclick="i = 6, settingsOpen()">');
+                                }
+                            }
+                        ?>
+                    </div>
+                    <?php
+                                    $id = 7;
+                                    newsRead($id);
+                    ?>
+                    <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-16 15:06"><?=$title[$id-1][2]?></time></p>
                 </div>
-                <?php
-                                $id = 5;
-                                newsRead($id);
-                ?>
-                <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-16 14:24"><?=$title[$id-1][2]?></time></p>
-            </div>
 
-            <div class="news-header" id="fifth-block-header">
-                <img src="images/5-1.jpg">
-                <button onclick="i = 4, newsCall()">
-                <p><?=$title[$id-1][1]?></p>
-                </button>
-            </div>
-        </div>
-
-        <!---------------------sixth block--------------------->
-        <div class="news-container sixth-block" id="sixth-block">
-            <div class="news-box" id="sixth-block-box">
-                <div style="display: flex; justify-content: space-between;">
-                    <img src="icons/icon_back.png" class="news-back" onclick="i = 5, newsClose()">
-                    <img src="icons/icon-settings.png" class="news-settings" onclick="i = 5, settingsOpen()">
+                <div class="news-header" id="seventh-block-header">
+                    <img src="images/7-1.jpg">
+                    <button onclick="i = 6, newsCall()">
+                        <p><?=$title[$id-1][1]?></p>
+                    </button>
                 </div>
-                <?php
-                                $id = 6;
-                                newsRead($id);
-                ?>
-                <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-16 14:44"><?=$title[$id-1][2]?></time></p>
             </div>
 
-            <div class="news-header" id="sixth-block-header">
-                <img src="images/6-1.jpg">
-                <button onclick="i = 5, newsCall()">
-                    <p><?=$title[$id-1][1]?></p>
-                </button>
-            </div>
-        </div>
-
-        <!---------------------seventh block--------------------->
-        <div class="news-container seventh-block" id="seventh-block">
-            <div class="news-box" id="seventh-block-box">
-                <div style="display: flex; justify-content: space-between;">
-                    <img src="icons/icon_back.png" class="news-back" onclick="i = 6, newsClose()">
-                    <img src="icons/icon-settings.png" class="news-settings" onclick="i = 6, settingsOpen()">
+            <!---------------------eighth block--------------------->
+            <div class="news-container eighth-block" id="eighth-block">
+                <div class="news-box" id="eighth-block-box">
+                    <div style="display: flex; justify-content: space-between;">
+                        <img src="icons/icon_back.png" class="news-back" onclick="i = 7, newsClose()">
+                        <?php
+                            if (isset($_SESSION['signin']))
+                            {
+                                if ($privilege == 1)
+                                {
+                                    echo('<img src="icons/icon-settings.png" class="news-settings" onclick="i = 7, settingsOpen()">');
+                                }
+                            }
+                        ?>
+                    </div>
+                    <?php  
+                                    $id = 8;
+                                    newsRead($id);
+                    ?>
+                    <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-16 15:28"><?=$title[$id-1][2]?></time></p>
                 </div>
-                <?php
-                                $id = 7;
-                                newsRead($id);
-                ?>
-                <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-16 15:06"><?=$title[$id-1][2]?></time></p>
-            </div>
 
-            <div class="news-header" id="seventh-block-header">
-                <img src="images/7-1.jpg">
-                <button onclick="i = 6, newsCall()">
-                    <p><?=$title[$id-1][1]?></p>
-                </button>
-            </div>
-        </div>
-
-        <!---------------------eighth block--------------------->
-        <div class="news-container eighth-block" id="eighth-block">
-            <div class="news-box" id="eighth-block-box">
-                <div style="display: flex; justify-content: space-between;">
-                    <img src="icons/icon_back.png" class="news-back" onclick="i = 7, newsClose()">
-                    <img src="icons/icon-settings.png" class="news-settings" onclick="i = 7, settingsOpen()">
+                <div class="news-header" id="eighth-block-header">
+                    <img src="images/8-2.jpg">
+                    <button onclick="i = 7, newsCall()">
+                        <p><?=$title[$id-1][1]?></p>
+                    </button>
                 </div>
-                <?php  
-                                $id = 8;
-                                newsRead($id);
-                ?>
-                <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-16 15:28"><?=$title[$id-1][2]?></time></p>
             </div>
 
-            <div class="news-header" id="eighth-block-header">
-                <img src="images/8-2.jpg">
-                <button onclick="i = 7, newsCall()">
-                    <p><?=$title[$id-1][1]?></p>
-                </button>
-            </div>
-        </div>
-
-        <!---------------------ninth block--------------------->
-        <div class="news-container ninth-block" id="ninth-block">
-            <div class="news-box" id="ninth-block-box">
-                <div style="display: flex; justify-content: space-between;">
-                    <img src="icons/icon_back.png" class="news-back" onclick="i = 8, newsClose()">
-                    <img src="icons/icon-settings.png" class="news-settings" onclick="i = 8, settingsOpen()">
+            <!---------------------ninth block--------------------->
+            <div class="news-container ninth-block" id="ninth-block">
+                <div class="news-box" id="ninth-block-box">
+                    <div style="display: flex; justify-content: space-between;">
+                        <img src="icons/icon_back.png" class="news-back" onclick="i = 8, newsClose()">
+                        <?php
+                            if (isset($_SESSION['signin']))
+                            {
+                                if ($privilege == 1)
+                                {
+                                    echo('<img src="icons/icon-settings.png" class="news-settings" onclick="i = 8, settingsOpen()">');
+                                }
+                            }
+                        ?>
+                    </div>
+                    <?php
+                                    $id = 9;
+                                    newsRead($id);
+                    ?>
+                    <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-16 15:59"><?=$title[$id-1][2]?></time></p>
                 </div>
-                <?php
-                                $id = 9;
-                                newsRead($id);
-                ?>
-                <p style="margin-left: 15px; color: rgb(78, 78, 78);">Опубликовано: <time datetime="2022-04-16 15:59"><?=$title[$id-1][2]?></time></p>
+
+                <div class="news-header" id="ninth-block-header">
+                    <img src="images/9-1.jpg">
+                    <button onclick="i = 8, newsCall()">
+                        <p><?=$title[$id-1][1]?></p>
+                    </button>
+                </div>
             </div>
 
-            <div class="news-header" id="ninth-block-header">
-                <img src="images/9-1.jpg">
-                <button onclick="i = 8, newsCall()">
-                    <p><?=$title[$id-1][1]?></p>
-                </button>
-            </div>
-        </div>
-
-        
-    </main>
+            
+        </main>
+    </div>
     <script src="newsBlocks.js"></script>
     <script src="marginCalc.js"></script>
     <footer>

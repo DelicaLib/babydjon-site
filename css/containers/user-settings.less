@@ -1,0 +1,91 @@
+// main: ../style.less
+
+.settings-profile {
+    display: none;
+    
+    position: absolute;
+    &.active {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    padding: 10px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    min-height: 300px;
+    height: auto;
+    z-index: 20;
+    background-color: @green;
+    border: 2px solid black;
+    border-radius: 15px;
+    & > div {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+}
+
+.setting-input {
+    border-radius: 0 15px 15px 0;
+    margin: 0;
+    margin-left: 10px;
+    width: 50%;
+}
+
+div.setting-form {
+    display: block;
+    width: 100%;
+    
+    
+    div {
+        margin-bottom: 20px;
+        width: auto;
+        padding: 0;
+        height: auto;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        label {
+            font-size: 20px;
+            margin: 0;
+        }
+        & button {
+            background-color: @pale-blue;
+            width: 150px;
+            padding: 5px;
+            font-size: 20px;
+            border: 2px solid black;
+            border-radius: 15px;
+            justify-self: center;
+    
+            &:hover {
+                background-color: @bluish-green;
+            }
+        }
+    }
+}
+
+form.setting-form {
+    display: flex;
+    width: 100%;
+}
+
+.setting-avatar {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    input {
+        border: 2px solid black;
+        border-radius: 5px;
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    img.avatar-img--photo {
+        width: 100%;
+        height: auto;
+    }
+}
